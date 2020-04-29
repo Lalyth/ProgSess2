@@ -2,6 +2,7 @@
  * Auteur : Philippe Lamarche
  * Date : 21 Avril 2020 */
 
+import java.text.DecimalFormat;
 import java.util.Scanner;
 public class Exercices_3 {
 	public static void main (String[] args) {
@@ -53,11 +54,20 @@ public class Exercices_3 {
 		case 14:
 			Question14();
 			break;
+		case 15:
+			Question15(scan);
+			break;
+		case 16:
+			Question16(scan);
+			break;
+		case 17:
+			Question17(scan);
+			break;
 		}
 		scan.close();
 	}	
 	
-//Facile	
+// Facile	
 	// Question 1 Nombres de 1 à 25
 	public static void Question1() {
 		for (int i = 1; i<= 10; i = i + 1) {
@@ -372,7 +382,7 @@ public class Exercices_3 {
 		}	
 	}
 
-//Moyen	
+// Moyen	
 	// Question 13 Résultats scolaires
 	public static void Question13() {
 		String[] etudiant = {"Etu Un", "Etu Deux", "Etu Trois", "Etu Quatre", "Etu Cinq"};
@@ -403,7 +413,165 @@ public class Exercices_3 {
 	
 	// Question 14 Somme des entiers multiple de 3 et plus petit que 100
 	public static void Question14() {
+		int somme = 0;
 		
+		for (int i = 0; i < 99; i++) {
+			if (i % 3 == 0) {
+				somme = somme + i;
+			}
+		}
+		System.out.print("La somme des entiers multiple de 3 et plus petit que 100 est de " + somme);
+	}
+	
+	// Question 15 Suite de Fibonacci
+	public static void Question15(Scanner scan) {
+		int iteration = 0;
+		int fibo = 0;
+		int fiboA = 0;
+		int fiboB = 1;
+		
+		System.out.print("Combien d'itérations ? ");
+		iteration = scan.nextInt();
+		
+		if (iteration == 1) {
+			System.out.print(fiboA);
+		} else if (iteration == 2) {
+			System.out.print(fiboA + " " + fiboB);
+		} else { 
+			System.out.print(fiboA + " " + fiboB + " ");
+		for (int i = 1; i <= iteration - 2; i++) {
+			fibo = fiboA + fiboB;
+			System.out.print(fibo + " ");
+			fiboA = fiboB;
+			fiboB = fibo;
+		}
+		}
+	}
+	
+// Difficile
+	// Question 16 Gestion d'un compte bancaire
+	public static void Question16(Scanner scan) {
+		
+		double solde = 0;
+		String choix;
+		String printSolde = String.format("+---------------------------+\n| Votre solde est de %.2f $ |\n+---------------------------+", solde);
+		
+		do {	
+			System.out.print("\nQuel option ?\n\n" + 
+							"D pour dépôt.\n" + 
+							"R pour retrait.\n" + 
+							"F paiement de facture.\n" + 
+							"S visualiser le solde au compte.\n" + 
+							"T terminer les transactions.\n");
+			choix = scan.next().toUpperCase();
+			
+			if (choix.contentEquals("D")) {
+				System.out.print("Combien voulez vous déposer : ");
+				double depot = scan.nextDouble();
+				
+				if (depot < 0) {
+					System.out.format("Entrer un montant positif.");
+				} else {
+					solde = solde + depot;
+					System.out.print(printSolde);
+				}
+			} else if (choix.contentEquals("R")) {
+				System.out.print("Combien voulez vous retirer : ");
+				double retrait = scan.nextDouble();
+				
+				if (retrait < 0) {
+					System.out.format("Entrer un montant positif.");
+				} else if (solde < retrait) {
+					System.out.format("Vous n'avez pas assez d'argent.");
+				} else {
+					solde = solde - retrait;
+					System.out.print(printSolde);
+				}
+			} else if (choix.contentEquals("F")) {
+				System.out.print("Entrer le montant du paiement : ");
+				double paiment = scan.nextDouble();
+				
+				if (paiment < 0) {
+					System.out.format("Entrer un montant positif.");
+				} else if (solde < paiment) {
+					System.out.format("Vous n'avez pas assez d'argent.");
+				} else {
+					solde = solde - paiment;
+					System.out.print(printSolde);
+				}
+			} else if (choix.contentEquals("S")) {
+				System.out.print(printSolde);
+			} else if (choix.contentEquals("T")) {
+				System.out.format("Merci, au revoir!");
+			} else {
+				System.out.format("Entrer une option valide.");
+			}
+		} while (!choix.contentEquals("T"));
+	}
+	
+	// Question 17 Guichet d'aviation
+	public static void Question17(Scanner scan) {
+		String nom;
+		int age = 0;
+		String destination;
+		int groupe = 0;
+		String membre;
+		int prix = 0; 
+		
+		// try catch pour gerer les erreur d'input
+
+// nom		
+		System.out.print("Quel est votre nom ? ");
+		nom = scan.next();
+	
+// age -> prix 	
+		do {
+			System.out.print("Quel est votre âge ? ");
+			age = scan.nextInt();
+			if (age >= 0 && age <= 5) {
+				prix = 200;
+			} else if (age >= 6 && age <= 17) {
+				prix = 250;
+			} else if (age >= 18 && age <= 64) {
+				prix = 350;
+			} else if (age >= 65) {
+				prix = 275;
+			} else if (age < 0) {
+				System.out.println("Écrire un âge valide.");
+				age = 0;
+			}
+		} while (age == 0);
+	
+// destination		
+		System.out.print("Votre destination ? ");
+		destination = scan.next();
+	
+// groupe		
+		do {
+			System.out.print("Combien de personne dans le groupe ? ");
+			groupe = scan.nextInt();
+			if (groupe >= 4 && groupe <= 9) {
+				// 10% rabais
+			} else if (groupe >= 10) {
+				// 20% rabais
+			} else if (groupe < 0) {
+				System.out.println("Écrire un nombre positif.");
+				groupe = 0;
+			}
+		} while (groupe == 0);
+		
+// Club Magic		
+		do {
+			System.out.print("Possedez-vous une carte Club Magic ? (O pour oui, N pour non) ");
+			membre = scan.next().toLowerCase();
+			if (membre.contentEquals("o")) {
+				
+			} else if (membre.contentEquals("n")) {
+				
+			} else {
+				System.out.println("Écrire O ou N");
+			}
+		} while (!membre.contentEquals("o") && !membre.contentEquals("n"));
 		
 	}
 	
