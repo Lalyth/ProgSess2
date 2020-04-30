@@ -2,7 +2,6 @@
  * Auteur : Philippe Lamarche
  * Date : 21 Avril 2020 */
 
-import java.text.DecimalFormat;
 import java.util.Scanner;
 public class Exercices_3 {
 	public static void main (String[] args) {
@@ -511,68 +510,203 @@ public class Exercices_3 {
 	
 	// Question 17 Guichet d'aviation
 	public static void Question17(Scanner scan) {
-		String nom;
-		int age = 0;
-		String destination;
-		int groupe = 0;
-		String membre;
-		int prix = 0; 
+		// Logs
+		int nbrClient = 0;
+		int ageA = 0;  // 0 a 5
+		int ageB = 0;  // 6 a 17
+		int ageC = 0;  // 18 a 64
+		int ageD = 0;  // 65 +
+		int sommePrix = 0;
+		double sommeEscG = 0;
+		int sommeEscM = 0;
+		double sommeTps = 0;
+		double sommeTvq = 0;
+		double sommeTotal = 0;
 		
-		// try catch pour gerer les erreur d'input
-
-// nom		
-		System.out.print("Quel est votre nom ? ");
-		nom = scan.next();
-	
-// age -> prix 	
-		do {
-			System.out.print("Quel est votre âge ? ");
-			age = scan.nextInt();
-			if (age >= 0 && age <= 5) {
-				prix = 200;
-			} else if (age >= 6 && age <= 17) {
-				prix = 250;
-			} else if (age >= 18 && age <= 64) {
-				prix = 350;
-			} else if (age >= 65) {
-				prix = 275;
-			} else if (age < 0) {
-				System.out.println("Écrire un âge valide.");
-				age = 0;
-			}
-		} while (age == 0);
-	
-// destination		
-		System.out.print("Votre destination ? ");
-		destination = scan.next();
-	
-// groupe		
-		do {
-			System.out.print("Combien de personne dans le groupe ? ");
-			groupe = scan.nextInt();
-			if (groupe >= 4 && groupe <= 9) {
-				// 10% rabais
-			} else if (groupe >= 10) {
-				// 20% rabais
-			} else if (groupe < 0) {
-				System.out.println("Écrire un nombre positif.");
-				groupe = 0;
-			}
-		} while (groupe == 0);
+		// Use "try catch" pour gerer les erreur d'input
 		
-// Club Magic		
+		String autre;
 		do {
-			System.out.print("Possedez-vous une carte Club Magic ? (O pour oui, N pour non) ");
-			membre = scan.next().toLowerCase();
-			if (membre.contentEquals("o")) {
-				
-			} else if (membre.contentEquals("n")) {
-				
+			String nom;
+			int age = 0;
+			int prix = 0; 
+			String destination;
+			int groupe = 0;
+			double escompteG = 1;
+			String membre = "n";
+			int escompteM = 0;
+			int memType = 0;
+			double tps = 0;
+			double tvq = 0;
+			double sousTotal = 0;
+			double total = 0;
+			double escompteGT = 0;
+			
+			// Nom		
+			System.out.print("Quel est votre nom ? ");
+			nom = scan.next();
+		
+			// Age -> Prix 	
+			do {
+				System.out.print("Quel est votre âge ? ");
+				age = scan.nextInt();
+				if (age >= 0 && age <= 5) {
+					prix = 200;
+					ageA++;
+				} else if (age >= 6 && age <= 17) {
+					prix = 250;
+					ageB++;
+				} else if (age >= 18 && age <= 64) {
+					prix = 350;
+					ageC++;
+				} else if (age >= 65) {
+					prix = 275;
+					ageD++;
+				} else if (age < 0) {
+					System.out.println("Écrire un âge valide.");
+					age = 0;
+				}
+			} while (age == 0);
+		
+			//Ddestination		
+			System.out.print("Votre destination ? ");
+			destination = scan.next();
+		
+			// Groupe		
+			do {
+				System.out.print("Combien de personne dans le groupe ? ");
+				groupe = scan.nextInt();
+				if (groupe >= 4 && groupe <= 9) {
+					escompteG = 0.10;
+				} else if (groupe >= 10) {
+					escompteG = 0.20;
+				} else if (groupe < 0) {
+					System.out.println("Écrire un nombre positif.");
+					groupe = 0;
+				}
+			} while (groupe == 0);
+			
+			// Club Magic si 65 ans et plus
+			if (age >= 65) {
+				do {
+					System.out.print("Possedez-vous une carte Club Magic ? (O pour oui, N pour non) ");
+					membre = scan.next().toLowerCase();
+					if (membre.contentEquals("o")) {
+						do {
+							System.out.print("Or ou Argent ? (0 pour OR, 1 pour ARGENT) ");
+							memType = scan.nextInt();
+							if (memType == 0) { // OR
+								escompteM = 25;
+							} else if (memType == 1) { // ARGENT
+								escompteM = 20;
+							} else {
+								System.out.println("Écrire 0 ou 1.");
+							}
+						} while (memType != 0 && memType != 1);
+					} else if (membre.contentEquals("n")) {
+						// Ne rien faire
+					} else {
+						System.out.println("Écrire O ou N");
+					}
+				} while (!membre.contentEquals("o") && !membre.contentEquals("n"));
+			}
+			
+			// Calcul escompte
+			if (escompteG == 1) {
+				sousTotal = prix - escompteM;
 			} else {
-				System.out.println("Écrire O ou N");
+				escompteGT = prix * escompteG;
+				sousTotal = prix - escompteGT - escompteM;
 			}
-		} while (!membre.contentEquals("o") && !membre.contentEquals("n"));
+			
+			// Calcul des taxes
+			tps = sousTotal * 0.05;
+			tvq = sousTotal * 0.095;
+			total = sousTotal + tps + tvq;
+			
+			
+			// Impression des info (O = Membre / G = Groupe)
+			String impressionO = String.format("- - - - -\n"
+					+ "Votre nom : %s\n"
+					+ "Votre destination : %s\n"
+					+ "Le prix de base : %d\n"
+					+ "Votre escompte Club Magic : %d $\n"
+					+ "TPS : %.2f $\n"
+					+ "TVQ : %.2f $\n"
+					+ "Total : %.2f $",nom,destination,prix,escompteM,tps,tvq,total);
+			String impressionOG = String.format("- - - - -\n"
+					+ "Votre nom : %s\n"
+					+ "Votre destination : %s\n"
+					+ "Le prix de base : %d\n"
+					+ "Votre escompte de groupe : %.2f %% => %.2f $\n"
+					+ "Votre escompte Club Magic : %d $\n"
+					+ "TPS : %.2f $\n"
+					+ "TVQ : %.2f $\n"
+					+ "Total : %.2f $",nom,destination,prix,escompteG,escompteGT,escompteM,tps,tvq,total);
+			String impression = String.format("- - - - -\n"
+					+ "Votre nom : %s\n"
+					+ "Votre destination : %s\n"
+					+ "Le prix de base : %d\n"
+					+ "TPS : %.2f $\n"
+					+ "TVQ : %.2f $\n"
+					+ "Total : %.2f $",nom,destination,prix,tps,tvq,total);
+			String impressionG = String.format("- - - - -\n"
+					+ "Votre nom : %s\n"
+					+ "Votre destination : %s\n"
+					+ "Le prix de base : $%d\n"
+					+ "Votre escompte de groupe : %.2f %% => %.2f $\n"
+					+ "TPS : %.2f $\n"
+					+ "TVQ : %.2f $\n"
+					+ "Total : %.2f $",nom,destination,prix,escompteG,escompteGT,tps,tvq,total);
+			
+			if (membre.contentEquals("o")) {
+				if (escompteG == 1) {
+					System.out.println(impressionO);
+				} else {
+					System.out.println(impressionOG);
+				} 
+			} else {
+				if (escompteG == 1) {
+					System.out.println(impression);
+				} else {
+					System.out.println(impressionG);
+				}
+			}
+			
+			// Logs
+			nbrClient++;
+			sommeTps = sommeTps + tps;
+			sommeTvq = sommeTvq + tvq;
+			sommePrix = sommePrix + prix;
+			sommeEscM = sommeEscM + escompteM;
+			sommeEscG = sommeEscG + escompteGT;
+			sommeTotal = sommeTotal + total;
+			
+			// Loop prompt
+			do {
+				System.out.print("Un autre client O/N ? ");
+				autre = scan.next().toLowerCase();
+				if (!autre.contentEquals("o") && !autre.contentEquals("n")) {
+					System.out.println("--- Erreur ---");
+				}
+			} while (!autre.contentEquals("o") && !autre.contentEquals("n"));
+		} while (autre.contentEquals("o")); // loop
+	
+		// Impression des logs
+		String impressionLogs = String.format("-  -  -  -  -\n"
+				+ "Clients : %d\n"
+				+ "0 à 5 ans : %d\n"
+				+ "6 à 17 ans : %d\n"
+				+ "18 à 64 ans : %d\n"
+				+ "65 ans et + : %d\n"
+				+ "Somme ventes billet : %d $\n"
+				+ "Somme escompte groupe : %.2f $\n"
+				+ "Somme escompte Magic : %d.00 $\n"
+				+ "Somme TPS : %.2f $\n"
+				+ "Somme TVQ : %.2f $\n"
+				+ "Somme d'argent accumulé : %.2f $",nbrClient,ageA,ageB,ageC,ageD,sommePrix,sommeEscG,sommeEscM,sommeTps,sommeTvq,sommeTotal);
 		
+		System.out.print(impressionLogs);
 	}
 	
 }
