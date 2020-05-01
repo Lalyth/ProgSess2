@@ -62,6 +62,9 @@ public class Exercices_3 {
 		case 17:
 			Question17(scan);
 			break;
+		case 18:
+			Question18(scan);
+			break;
 		}
 		scan.close();
 	}	
@@ -548,43 +551,53 @@ public class Exercices_3 {
 		
 			// Age -> Prix 	
 			do {
-				System.out.print("Quel est votre âge ? ");
-				age = scan.nextInt();
-				if (age >= 0 && age <= 5) {
-					prix = 200;
-					ageA++;
-				} else if (age >= 6 && age <= 17) {
-					prix = 250;
-					ageB++;
-				} else if (age >= 18 && age <= 64) {
-					prix = 350;
-					ageC++;
-				} else if (age >= 65) {
-					prix = 275;
-					ageD++;
-				} else if (age < 0) {
-					System.out.println("Écrire un âge valide.");
-					age = 0;
-				}
-			} while (age == 0);
-		
-			//Ddestination		
+				try {
+					System.out.print("Quel est votre âge ? ");
+					scan.nextLine();
+					age = scan.nextInt();
+					} catch (Exception e) {
+						age = -1;
+					}
+					if (age >= 0 && age <= 5) {
+						prix = 200;
+						ageA++;
+					} else if (age >= 6 && age <= 17) {
+						prix = 250;
+						ageB++;
+					} else if (age >= 18 && age <= 64) {
+						prix = 350;
+						ageC++;
+					} else if (age >= 65) {
+						prix = 275;
+						ageD++;
+					} else if (age < 0) {
+						System.err.println("Écrire un âge valide.");
+						age = -1;
+					}
+				} while (age == -1);
+			
+			// Destination		
 			System.out.print("Votre destination ? ");
 			destination = scan.next();
 		
 			// Groupe		
 			do {
-				System.out.print("Combien de personne dans le groupe ? ");
-				groupe = scan.nextInt();
+				try {
+					System.out.print("Combien de personne dans le groupe ? ");
+					scan.nextLine();
+					groupe = scan.nextInt();
+				} catch(Exception e) {
+					groupe = -1;
+				}
 				if (groupe >= 4 && groupe <= 9) {
 					escompteG = 0.10;
 				} else if (groupe >= 10) {
 					escompteG = 0.20;
 				} else if (groupe < 0) {
-					System.out.println("Écrire un nombre positif.");
-					groupe = 0;
+					System.err.println("Écrire un nombre positif.");
+					groupe = -1;
 				}
-			} while (groupe == 0);
+			} while (groupe == -1);
 			
 			// Club Magic si 65 ans et plus
 			if (age >= 65) {
@@ -600,13 +613,13 @@ public class Exercices_3 {
 							} else if (memType == 1) { // ARGENT
 								escompteM = 20;
 							} else {
-								System.out.println("Écrire 0 ou 1.");
+								System.err.println("Écrire 0 ou 1.");
 							}
 						} while (memType != 0 && memType != 1);
 					} else if (membre.contentEquals("n")) {
 						// Ne rien faire
 					} else {
-						System.out.println("Écrire O ou N");
+						System.err.println("Écrire O ou N");
 					}
 				} while (!membre.contentEquals("o") && !membre.contentEquals("n"));
 			}
@@ -708,5 +721,11 @@ public class Exercices_3 {
 		
 		System.out.print(impressionLogs);
 	}
+
+	// Question 18 Marathon de Montréal
+	public static void Question18(Scanner scan) {
+		
+		
+	}
 	
-}
+} // Fin
