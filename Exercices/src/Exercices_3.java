@@ -65,10 +65,13 @@ public class Exercices_3 {
 		case 18:
 			Question18(scan);
 			break;
+		default:
+			System.out.println("Un bon choix svp!");
+			break;
 		}
 		scan.close();
 	}	
-	
+           	
 // Facile	
 	// Question 1 Nombres de 1 à 25
 	public static void Question1() {
